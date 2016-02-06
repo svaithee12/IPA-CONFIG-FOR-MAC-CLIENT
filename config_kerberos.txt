@@ -1,0 +1,51 @@
+CONFIGURING KERBEROS IN MAC-CLIENT:
+
+1. Mac comes with kerberos in-built.
+It just needs to be configured to communicate with the IPA server.
+
+
+2. Copy the krb5.conf file from the server and paste it in /Library/Preferences/edu.mit.kerberos
+
+        The contents of the same shall look like this :
+                (for a REALM : LABS.LOCAL and IPA server : ipa.labs.local)
+
+
+content of edu.mit.kerberos :
+
+
+[logging]
+ default = FILE:/var/log/krb5libs.log
+ kdc = FILE:/var/log/krb5kdc.log
+ admin_server = FILE:/var/log/kadmind.log
+
+[libdefaults]
+ dns_lookup_realm = true
+ dns_lookup_kdc = false
+ticket_lifetime = 24h
+ renew_lifetime = 7d
+ forwardable = true
+ default_realm = LABS.LOCAL
+
+[realms]
+LABS.LOCAL = {
+  kdc = ipa.labs.local
+  admin_server = ipa.labs.local
+}
+
+
+
+[domain_realm]
+.labs.local = LABS.LOCAL
+labs.local = LABS.LOCAL
+
+
+
+
+3. RESTART the kerberos and kadmin services :
+
+
+NOTE : the domain name shall be resolvable by the client .
+else add it to the /etc/hosts file : "ip_address ipa.labs.local"
+
+
+
