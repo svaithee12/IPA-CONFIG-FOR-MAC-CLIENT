@@ -1,0 +1,95 @@
+INSTRUCTIONS TO CONFIGURE LDAP CLIENT ON MAC : 
+(EL-CAPITAN)
+
+
+1. open SYSTEM PREFERENCES 
+2. Go to USERS AND GROUPS
+3. Click on LOGIN OPTIONS (left down corner)
+4. Click on the LOCK icon just below it and enter administrator credentials when prompted.
+6. Click on NETWORK ACCOUNT SERVER / JOIN 
+7. click on LOCK icon to make changes
+8. Click on SERVICES tab
+9. Select LDAPV3
+10. Click on PENCIL icon to edit 
+11. Enter IPA server DOMAIN name when prompted and click on MANUAL.
+12. Given the LDAP configuration a name.
+13. make sure SSL is UNCHECKED and LDAP MAPPING : CUSTOM
+14. select the LDAP server, created and click on EDIT.
+15. Now,  in the CONNECTION tab , 
+     
+    change the Connection idles out value to 2 mins
+    
+    let all the checkboxes be UNCHECKED.
+16. Go to SEARCH AND MAPPINGS tab.
+
+17. Access the LDAPV server using "CUSTOM"
+
+18. click on '+' (plus) on the LEFT pane to and select "USERS" attribute from the list 
+
+19. selecting the created USERS attribute on the LEFT PANE , click on + (plus) on RIGHT pane. and put “inetOrgPerson" in it.
+
+20. select the USERS attribute on the LEFT panel and click on PLUS.
+
+21. add the following attributes , (command+ click to select multiple attributes from the list at once)
+
+AuthenticationAuthority
+NFSHomeDirectory
+PrimaryGroupID
+RealName
+RecordName
+UniqueID
+UserShell
+
+    
+their corresponding RIGHT PANE values will be : 
+
+AuthenticationAuthority —— uid
+NFSHomeDirectory —— #/Users/$uid$
+PrimaryGroupID —— #5000
+RealName —— cn
+RecordName — — uid
+UniqueID —— uidNumber
+UserShell — — #/bin/bash
+
+Go to SECURITY tab ,  and make sure all the checkboxes are UNCHECKED.
+click on OK
+now Go to SEARCH POLICY tab.
+in the Search: field , select "Custom Path”
+add /LDAPV3/ipa.labs.local
+click on APPLY
+
+close the window .
+
+Restart the system
+
+
+Now open a terminal and login as ROOT
+run the following 3 commands :
+
+NOTE : the remove the BOLD part and press TAB 
+
+/usr/libexec/PlistBuddy -c "add ':module options:ldap:Denied SASL Methods:' string CRAM-MD5" /Library/Preferences/OpenDirectory/Configurations/LDAPv3/ipa.labs.local.plist 
+
+/usr/libexec/PlistBuddy -c "add ':module options:ldap:Denied SASL Methods:' string NTLM" /Library/Preferences/OpenDirectory/Configurations/LDAPv3/ipa.labs.local.plist 
+
+/usr/libexec/PlistBuddy -c "add ':module options:ldap:Denied SASL Methods:' string GSSAPI" /Library/Preferences/OpenDirectory/Configurations/LDAPv3/ipa.labs.local.plist
+
+
+Restart your system
+
+
+Open SYSTEM PREFERENCES, 
+USERS AND GROUPS
+LOGIN OPTIONS
+you should see a GREEN Color opposite to the LDAP server name.
+
+you are DONE ! 
+Cheers ! :)
+
+
+for INSTRUCTIONS WITH IMAGES CLICK ON THIS LINK : 
+
+but they are for MAC OS LEOPARD(older)
+
+http://clc.its.psu.edu/UnivServices/itadmins/mac/kerbldaplogins/ldapauthorization-leopard
+  
